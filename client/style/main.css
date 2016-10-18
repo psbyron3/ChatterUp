@@ -1,0 +1,49 @@
+
+/* Chat input box*/
+.form-control.input-sm.chat_input { 
+  position: fixed;
+  bottom: 0;
+  margin-bottom: 20px;
+}
+
+#btn-chat {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  width: 15%;
+  margin-bottom: 20px;
+}
+
+.messages.msg-sent {
+  padding-bottom: 20px !important;
+  margin-right: 0;
+  margin-left: auto;
+}
+
+#sent-msg {
+  display: flex;
+  justify-content: flex-end;
+};
+
+.msg-receive {
+  padding-left: 0;
+  margin-left: 0;
+}
+
+.row.chatbox-container.base_sent {
+  border: 3px black;
+  vertical-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+
+.messages {
+  background: lightblue;
+  padding: 10px;
+  border-radius: 2px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/******************************************************************************************** */
+
