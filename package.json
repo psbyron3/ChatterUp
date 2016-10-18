@@ -3,26 +3,17 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.jsx",
-  "scripts": [ 
-    { 
-    "clean-public" : "npm run remove-public && mkdir public",
-    "remove-public" : "node_modules/.bin/rimraf ./public",
-    "build:html" : "babel-node tools/buildHtml.js",
-    "prebuild" : "npm-run-all clean-public lint build:html",
-    "build" : "babel-node tools/build.js",
-    "postbuild" : "babel-node tools/publicServer.js",
+  "dist": "webpack -p",
+  "postinstall": "npm run dist",
+  "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
-    }
-  ],
+  },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "assert": "^1.4.1",
     "axios": "^0.15.1",
-    "body-parser": "^1.15.2",
-    "compression": "^1.6.1",
-    "open": "0.0.5",
-    "colors": "1.1.2",
+    "body-parser": "^1.15.2",  
     "dotenv": "^2.0.0",
     "express": "^4.14.0",
     "firebase": "^3.5.0",
