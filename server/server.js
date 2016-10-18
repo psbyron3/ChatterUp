@@ -48,42 +48,18 @@ app.get('*', (request, response) => {
 //app.listen(port);
 console.log(moment().format('h:mm:ss a') + ": Server is tuning in live on 3000");
 
+/////////////////////CORS////////////////////////////////
 
-// const sendMessages = function (socket) {
-//   fs.readFile('../client/components', 'utf8', function(err, messages) {
-//     messages = JSON.parse(messages);
-//     socket.emit('messages', messages);
-//   });
-// };
+app.use(function(req, res, next) {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+  res.header('Access-Control-Allow-Headers', 
+    'Content-Type, X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5,  Date, X-Api-Version, X-File-Name');
+  next();
+});
 
-
-// Init Socket.io
-// const connections = [];
-
-// io.sockets.on('connection', (socket) => {
-//   socket.emit('message', 'You are connected!!');
-
-//   socket.on('message', (message) => {
-//     app.send()
-//   })
-//   console.log("Sockets has a successful connection");
-  
-//   connections.push(socket);
-
-//   socket.on('fetchMessages', function () {
-//     sendMessages(socket);
-//   });
-
-  // socket.on('newMessage', function (comment, callback) {
-  //   fs.readFile('../client/components', 'utf8', function(err, comments) {
-  //     messages = JSON.parse(messages);
-  //     messages.push(messages);
-  //     fs.writeFile('../client/components/chat.jsx', JSON.stringify(messages, null, 4), function (err) {
-  //       io.emit('messages', messages);
-  //       callback(err);
-  //     });
-  //   });
-  // });
+//////////////////////////////////////////////////////
+/////////// SOCKETS /////////////////////////////////
 
 const connections = [];
 io.on('connection', (socket) => {
