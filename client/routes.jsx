@@ -3,7 +3,6 @@ import { Route, IndexRoute } from 'react-router';
 
 import App from './components/app';
 import Chat from './components/chat';
-import ChatBox from './samplechatbox.jsx';
 
 
 
