@@ -4,8 +4,8 @@
     './client/index.jsx'
   ],
   output: {
-    path: __dirname + '/client/dist',
-    publicPath: '/',
+    path: __dirname + '/client/public',
+    publicPath: '/public/',
     filename: 'bundle.js'
   },
   module: {
