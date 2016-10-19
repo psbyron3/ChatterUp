@@ -50,13 +50,13 @@ console.log(moment().format('h:mm:ss a') + ": Server is tuning in live on 3000")
 
 /////////////////////CORS////////////////////////////////
 
-app.use(function(req, res, next) {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
-  res.header('Access-Control-Allow-Headers', 
-    'Content-Type, X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5,  Date, X-Api-Version, X-File-Name');
-  next();
-});
+// app.use(function(req, res, next) {
+//   res.header('Access-Control-Allow-Origin', '*');
+//   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+//   res.header('Access-Control-Allow-Headers', 
+//     'Content-Type, X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5,  Date, X-Api-Version, X-File-Name');
+//   next();
+// });
 
 //////////////////////////////////////////////////////
 /////////// SOCKETS /////////////////////////////////
@@ -66,10 +66,10 @@ io.on('connection', (socket) => {
   console.log("Sockets are beautifully connected");
   connections.push(socket);
   // when a client send a message event
-  socket.on('message', (msg) => {
+  socket.on('/api/messages', (msg) => {
     console.log('The MSG in server for sockets', msg);
     fs.writeFile('../client/components/chat.jsx', JSON.stringify(messages, null, 4), function (err) {
-      io.emit('messages', messages);
+      io.emit('/api/messages', messages);
       callback(err);
     });
     // emit this message to all other client that are listenning (if I want to exclude myself use broadcast)

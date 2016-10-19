@@ -13,7 +13,7 @@ export default class Chat extends Component {
       messages : [],
       message : '',
     };
-    this.socket = io('/');
+    this.socket = io('/api/');
     this.onSubmitMessage = this.onSubmitMessage.bind(this);
     this.onInputChange = this.onInputChange.bind(this);
     //this.socket.on('messages', (newChatState) => this.handleStateChange(newChatState))
@@ -23,32 +23,33 @@ export default class Chat extends Component {
     axios.get(`api/messages`).then((result) => {
       const messages = result.data
       console.log("COMPONENT WILL Mount messages : ", messages);
-      this.setState({ messages: [...this.state.messages.concat([...messages.content])] })
+      this.setState({ messages: [ ...messages.content ] })
     })
   };
 
   componentDidMount() {
-    axios.get(`api/messages`).then((result) => {
+    // axios.get(`api/messages`).then((result) => {
       
-      if (typeof result.data == "object") {
-        const messages = result.data
-        this.setState({ messages: [...this.state.messages, ...messages.content] })
-      }
-    });
-    this.socket = io('/');
-      this.socket.on('message', function (data) {
-        console.log("in componenetDidMount", data);
-        this.socket.emit('message', data);
+    //   if (typeof result.data == "object") {
+    //     const messages = result.data
+    //     this.setState({ messages: [...this.state.messages, ...messages.content] })
+    //   }
+    // });
+    this.socket.on('messages', function (data) {
+      console.log("in componenetDidMount", data);
+      this.socket.emit('messages', data);
     });
     
   };
 
-  componentWillReceiveProps(nextProps) {
-    let { messages } = this.props;
-    this.setState({
-      messages: [...nextProps.messages],
-    })
-  }
+  // componentWillReceiveProps(nextProps) {
+  //   let { messages } = this.props;
+  //   console.log("IN comp will Receive Props ::::: ", this.props)
+  //   this.setState({
+  //     messages: [...nextProps.messages],
+  //   })
+  //   console.log("State in will receive props ++++ ", this.state)
+  // }
 
   onInputChange(event) {
     console.log("this is the value for input", event.target.value);
@@ -59,6 +60,7 @@ export default class Chat extends Component {
 
   onSubmitMessage(event) {
     console.log("the event in onSubmit", event);
+    console.log("The message onSubmit : ", this.state.message)
     event.preventDefault();
 
     const content = this.state.message;
@@ -74,10 +76,9 @@ export default class Chat extends Component {
     // add the new message to bottom of list
     this.setState({ messages: [...this.state.messages, msg.content] }, () => {
       // clear out input field
-      //this.setState({ message : '' })
+      this.setState({ message : '' })
     })
-    this.setState({ message : '' })
-    this.socket.emit('message', msg);
+    this.socket.emit('messages', msg);
 
 
 
@@ -91,6 +92,7 @@ export default class Chat extends Component {
   }
 
   renderChat() {
+    //console.log("IN RENDERCHAT with state :", this.state.messages)
     const messages = this.state.messages.map((msg, index) => (
     
       <ChatBox

@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.jsx",
-  "dist": "webpack -p",
-  "postinstall": "npm run dist",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "webpack -p",
+    "start" : "node server/server.js"
   },
   "author": "",
   "license": "ISC",
