@@ -46,7 +46,7 @@ app.get('*', (request, response) => {
 });
 
 //app.listen(port);
-console.log(moment().format('h:mm:ss a') + ": Server is tuning in live on 3000");
+console.log(moment().format('h:mm:ss a') + ": Server is tuning in live on port : " + app.get('port'));
 
 /////////////////////CORS////////////////////////////////
 
