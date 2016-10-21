@@ -29,7 +29,7 @@ app.use(bodyParser.json());
 // debugger
 app.use(morgan('dev')); 
 // Serve up our static files
-app.use(express.static('../client'));
+app.use(express.static('./'));
 
 
 
@@ -42,7 +42,7 @@ app.use('/api/messages', messageRouter);
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 app.get('*', (request, response) => {
-  response.sendFile(path.resolve(__dirname, '../client', 'index.html'));
+  response.sendFile(path.resolve(__dirname, '../' , 'index.html'));
 });
 
 //app.listen(port);
