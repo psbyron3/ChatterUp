@@ -3,7 +3,7 @@ import { Route, IndexRoute } from 'react-router';
 
 import App from './components/app';
 import Chat from './components/chat';
-import ChatBox from './components/chatbox';
+import ChatBox from './components/chatBox';
 
 
 

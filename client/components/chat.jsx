@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import io from 'socket.io-client';
 import axios from 'axios';
 import { Link } from 'react-router';
-import ChatBox from './chatbox.jsx';
+import ChatBox from './chatBox.jsx';
 
 
 export default class Chat extends Component {
