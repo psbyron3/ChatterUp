@@ -6,6 +6,7 @@ import ChatBox from './chatBox.jsx';
 
 
 export default class Chat extends Component {
+
   constructor(props){
     super(props);
 
@@ -18,7 +19,7 @@ export default class Chat extends Component {
   }
 
   componentDidMount() {
-    return axios.get(`api/messages`)
+    axios.get(`api/messages`)
       .then((result) => {
         //console.log("COMPONENT DID Mount messages : ", result);
         //console.log("Length of array : ", result.data.length)
@@ -26,7 +27,7 @@ export default class Chat extends Component {
           this.setState({ 
             messages: [ ...this.state.messages, ...result.data] 
           } , () => { 
-            console.log("The state after messages are mounted : ", this.state) 
+            //console.log("The state after messages are mounted : ", this.state) 
           })
       }
     })
@@ -35,35 +36,6 @@ export default class Chat extends Component {
       this.newMessage(msg);
     })
   };
-
-  // componentDidMount() {
- 
-  //   socket.emit('join global')
-  //   this.socket.on('messages', function (data) {
-  //     console.log("in componenetDidMount", data);
-  //     this.socket.emit('messages', data);
-  //   });
-    
-  // };
-
-  // componentWillReceiveProps(nextProps) {
-  //   let { messages } = this.props;
-  //   console.log("IN comp will Receive Props ::::: ", this.props)
-  //   this.setState({
-  //     messages: [...nextProps.messages],
-  //   }, () => this.scrollToBottom().bind(this) );
-  //   console.log("State in will receive props ++++ ", this.state)
-  // }
-
-  //set new msg to state
-  // newMessage(msg) {
-  //   axios.post(`api/messages/`, msg);
-  //   this.setState({ messages: [...this.state.messages, msg] }, () => {
-  //     //this.scrollToBottom();
-  //     this.setState({ message : '' }) 
-  //   })
-  //   this.socket.emit('messages', msg)
-  // }
   
    // slide down chatbox to most current message
   newMessage(msg) {
@@ -80,7 +52,6 @@ export default class Chat extends Component {
     chatBox.scrollTop = chatBox.scrollHeight;
 
   }
-
 
   onInputChange(event) {
     //console.log("this is the value for input", event.target.value);
@@ -101,10 +72,15 @@ export default class Chat extends Component {
       userId : "one",
       chatRoomId : "two"
     }
-    axios.post(`api/messages/`, msg).
-    then(() => {
+    axios.post(`api/messages/`, msg)
+    .then(() => {
       this.newMessage(msg);
       socket.emit('new message', msg);
+    })
+    .then(() => {
+      socket.on('message', (msg) => {
+        this.newMessage(msg);
+      })
     })
   };
   

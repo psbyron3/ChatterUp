@@ -46,6 +46,12 @@
   margin-left: auto;
 }
 
+.messages.msg-received {
+  padding-bottom: 20px !important;
+  margin-left: 0;
+  margin-right : auto;
+}
+
 #sent-msg {
   display: flex;
   justify-content: flex-end;
@@ -54,10 +60,14 @@
   margin-right: 5%;
 };  
 
-.msg-receive {
-  padding-left: 0;
-  margin-left: 0;
-}
+/*#received-msg {
+  display: flex;
+  justify-content: flex-start;
+  padding-bottom: 5px;
+  overflow: hidden;
+  margin-left: 5%;
+  background: green;
+}*/
 
 chatbox-container.base_sent {
   border: 3px black;

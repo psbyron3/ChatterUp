@@ -2,6 +2,8 @@ module.exports = (io) => {
 
   io.on('connection', (socket) => {
     console.log("Beautiful sockets are connected")
+    console.log("THE HANDSHAKES : ", socket.handshake.issued)
+    //socket.emit('join user', socket.handshake.issued);
     socket.once('disconnect', () => {
       console.log("socket is disconnected");
     });
@@ -13,7 +15,7 @@ module.exports = (io) => {
 
     socket.on('new message', (msg) => {
       console.log("The new message from sockets : ", msg);
-      socket.broadcast.emit('message', msg.content);
+      socket.broadcast.emit('message', msg);
     });
 
   });
