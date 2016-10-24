@@ -20,7 +20,7 @@ const server = http.createServer(app); // create instance of http server
 
 app.use(bodyParser.json()); // Data chunker
 app.use(morgan('dev')); // debugger
-app.use(express.static('../')); // Serve up our static files
+app.use(express.static('./')); // Serve up our static files
 
 
 // +++++++++++++++++++++++++++++ ROUTES ++++++++++++++++++++++++++++++++++++
