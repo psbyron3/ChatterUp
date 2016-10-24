@@ -3,15 +3,29 @@ import { Link } from 'react-router';
 import io from 'socket.io-client'
 
 export default class App extends Component {
-  componentDidUpdate() {
-    window.scrollTo(0, 0);
+  constructor(props) {
+    super(props)
   }
+
+  // componentWillMount() {
+  //   axios.get(`api/messages`)
+  //     .then((result) => {
+  //       this.props.messages = result.data
+  //       console.log("Props in App : ", this.props.messages)
+  //   })
+  // };
+
+  componentDidUpdate() {
+      window.scrollTo(0, 0);
+  };
 
   render() {
     return (
       <div>
         <div id="routeView">
-          <div>
+          <div
+            messages={this.props.messages}  
+          >
             {this.props.children}
           </div>
         </div>

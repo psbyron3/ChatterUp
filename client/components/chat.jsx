@@ -13,56 +13,86 @@ export default class Chat extends Component {
       messages : [],
       message : '',
     };
-    this.socket = io('/api/');
     this.onSubmitMessage = this.onSubmitMessage.bind(this);
     this.onInputChange = this.onInputChange.bind(this);
-    //this.socket.on('messages', (newChatState) => this.handleStateChange(newChatState))
   }
 
-  componentWillMount() {
-    axios.get(`api/messages`).then((result) => {
-      const messages = result.data
-      console.log("COMPONENT WILL Mount messages : ", messages);
-      this.setState({ messages: [ ...messages.content ] })
+  componentDidMount() {
+    return axios.get(`api/messages`)
+      .then((result) => {
+        //console.log("COMPONENT DID Mount messages : ", result);
+        //console.log("Length of array : ", result.data.length)
+        if (result.data.length) {
+          this.setState({ 
+            messages: [ ...this.state.messages, ...result.data] 
+          } , () => { 
+            console.log("The state after messages are mounted : ", this.state) 
+          })
+      }
+    })
+    .catch((err) => { throw err})
+    socket.on('new message', msg => {
+      this.newMessage(msg);
     })
   };
 
-  componentDidMount() {
-    // axios.get(`api/messages`).then((result) => {
-      
-    //   if (typeof result.data == "object") {
-    //     const messages = result.data
-    //     this.setState({ messages: [...this.state.messages, ...messages.content] })
-    //   }
-    // });
-    this.socket.on('messages', function (data) {
-      console.log("in componenetDidMount", data);
-      this.socket.emit('messages', data);
-    });
+  // componentDidMount() {
+ 
+  //   socket.emit('join global')
+  //   this.socket.on('messages', function (data) {
+  //     console.log("in componenetDidMount", data);
+  //     this.socket.emit('messages', data);
+  //   });
     
-  };
+  // };
 
   // componentWillReceiveProps(nextProps) {
   //   let { messages } = this.props;
   //   console.log("IN comp will Receive Props ::::: ", this.props)
   //   this.setState({
   //     messages: [...nextProps.messages],
-  //   })
+  //   }, () => this.scrollToBottom().bind(this) );
   //   console.log("State in will receive props ++++ ", this.state)
   // }
 
+  //set new msg to state
+  // newMessage(msg) {
+  //   axios.post(`api/messages/`, msg);
+  //   this.setState({ messages: [...this.state.messages, msg] }, () => {
+  //     //this.scrollToBottom();
+  //     this.setState({ message : '' }) 
+  //   })
+  //   this.socket.emit('messages', msg)
+  // }
+  
+   // slide down chatbox to most current message
+  newMessage(msg) {
+    this.setState({
+      messages: [...this.state.messages, msg]
+    }, () => {
+      this.setState({ message: '' })
+      return this.scrollToBottom()
+    });
+  };
+
+  scrollToBottom () {
+    const chatBox = this.refs.chatBox;
+    chatBox.scrollTop = chatBox.scrollHeight;
+
+  }
+
+
   onInputChange(event) {
-    console.log("this is the value for input", event.target.value);
+    //console.log("this is the value for input", event.target.value);
     this.setState({
       message: event.target.value
     })
-  }
+  };
 
   onSubmitMessage(event) {
-    console.log("the event in onSubmit", event);
-    console.log("The message onSubmit : ", this.state.message)
+    //console.log("the event in onSubmit", event);
+    //console.log("The message onSubmit : ", this.state.message)
     event.preventDefault();
-
     const content = this.state.message;
 
     const msg = {
@@ -71,46 +101,39 @@ export default class Chat extends Component {
       userId : "one",
       chatRoomId : "two"
     }
-    // store the msg object in the database
-    axios.post(`api/messages/`, msg);
-    // add the new message to bottom of list
-    this.setState({ messages: [...this.state.messages, msg.content] }, () => {
-      // clear out input field
-      this.setState({ message : '' })
+    axios.post(`api/messages/`, msg).
+    then(() => {
+      this.newMessage(msg);
+      socket.emit('new message', msg);
     })
-    this.socket.emit('messages', msg);
-
-
-
   };
   
-  // slide down chatbox to most current message
-  scrollToBottom () {
-    const chatBox = this.refs.chatBox;
-    chatBox.scrollTop = chatBox.scrollHeight;
-
-  }
 
   renderChat() {
     //console.log("IN RENDERCHAT with state :", this.state.messages)
-    const messages = this.state.messages.map((msg, index) => (
-    
-      <ChatBox
-        key={index}
-        body={msg}
-      />
-    ))
-    return messages
+    if (this.state.messages.length === 0) {
+      return <div> You have no messages </div>
+    }
+    return (
+      this.state.messages
+      .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
+      .map((msg, index) => {
+        // console.log("Mapped state in renderChat : ", msg);
+        return (
+          <ChatBox
+            key={index}
+            body={msg}
+          />
+        );
+      })
+    );
   }
 
   render() {
     return (
       <div>
-        <ul>
-          Welcome to ChatMeUp. Chat Away!
-        </ul>
         <form onSubmit={this.onSubmitMessage}>
-          <div>
+          <div className='chat-input-container'>
             <input
               id="msg-input"
               type="text"
@@ -126,9 +149,9 @@ export default class Chat extends Component {
           </div>
         </form>
         <div className="chatroom"> 
-        </div>
-        <div className="msg-container">
-          {this.renderChat()}
+          <div className="msg-container" ref="chatBox">
+            {this.renderChat()}
+          </div>
         </div>
       </div>
     );
